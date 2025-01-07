@@ -1,6 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import { TierImage } from './components/Image';
+import { Tier, TierProps } from './components/Tier';
+
+const default_tier_levels: TierProps[] = [
+  {
+    name: 'S',
+    color: 'green',
+    textColor: 'black',
+  },
+  {
+    name: 'A',
+    color: 'yellow',
+    textColor: 'black',
+  },
+  {
+    name: 'B',
+    color: 'red',
+    textColor: 'black',
+  },
+];
 
 function App() {
   const [images, setImages] = useState<string[]>([]);
@@ -15,6 +34,16 @@ function App() {
 
   return (
     <>
+      <div className='flex flex-col w-full'>
+        {default_tier_levels.map(tier_level => (
+          <Tier
+            color={tier_level.color}
+            textColor={tier_level.textColor}
+            name={tier_level.name}
+            key={tier_level.name}
+          />
+        ))}
+      </div>
       <div className='flex flex-row w-full'>
         {images.map((image, index) => (
           <TierImage image={image} name='test' key={index} />
