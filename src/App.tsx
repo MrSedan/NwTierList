@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useRef, useState } from 'react';
+import './App.css';
+import { TierImage } from './components/Image';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [images, setImages] = useState<string[]>([]);
+  useEffect(() => {
+    console.log(images);
+  }, [images]);
+  const uploadBtn = useRef<HTMLInputElement>(null);
+
+  const clickUpload = () => {
+    if (uploadBtn.current) uploadBtn.current.click();
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className='flex flex-row w-full'>
+        {images.map((image, index) => (
+          <TierImage image={image} name='test' key={index} />
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className='border border-black w-20 text-center cursor-pointer' onClick={clickUpload}>
+        <span>Upload</span>
+        <input
+          type='file'
+          name='imageUpload'
+          accept='.jpeg'
+          ref={uploadBtn}
+          style={{ display: 'none' }}
+          onChange={event => {
+            console.log(event.target.files);
+            if (event.target.files) {
+              const upload_images: string[] = [];
+              for (let i = 0; i < event.target.files.length; i++) {
+                const url = URL.createObjectURL(event.target.files[i]);
+                upload_images.push(url);
+              }
+              setImages(prev => [...prev, ...upload_images]);
+            }
+          }}
+        />
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
