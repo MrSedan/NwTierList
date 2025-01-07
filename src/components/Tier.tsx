@@ -27,17 +27,20 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
       text_color_code = '#2d3436';
   }
   return (
-    <div className='w-full min-h-64 bg-[#2d3436] relative h-auto'>
-      <div
-        className='w-52 h-80 flex items-center justify-center'
-        style={{
-          color: text_color_code,
-          backgroundColor: color_code,
-        }}
-      >
-        <p className=''>{name}</p>
+    <>
+      <div className='w-full min-h-64 bg-[#2d3436] h-auto flex flex-row'>
+        <div
+          className='w-52 h-80 flex items-center justify-center'
+          style={{
+            color: text_color_code,
+            backgroundColor: color_code,
+          }}
+        >
+          <p>{name}</p>
+        </div>
+        <div className='image-container flex flex-row gap-1'></div>
       </div>
       <hr />
-    </div>
+    </>
   );
 };
