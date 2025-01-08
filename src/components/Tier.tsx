@@ -1,3 +1,6 @@
+import { useAppSelector } from '../hooks';
+import { TierImage } from './Image';
+
 export interface TierProps {
   color: 'red' | 'yellow' | 'green';
   name: string;
@@ -6,6 +9,7 @@ export interface TierProps {
 export const Tier = ({ color, name, textColor }: TierProps) => {
   let color_code = '';
   let text_color_code = '';
+  const tierImages = useAppSelector(state => state.tierImages);
   switch (color) {
     case 'green':
       color_code = '#00b894';
@@ -38,7 +42,13 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
         >
           <p>{name}</p>
         </div>
-        <div className='image-container flex flex-row gap-1'></div>
+        <div className='image-container flex flex-row gap-1'>
+          {tierImages
+            .filter(image => image.category === name)
+            .map((image, index) => (
+              <TierImage image={image.url} name={image.name} key={index} />
+            ))}
+        </div>
       </div>
       <hr />
     </>
