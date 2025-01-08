@@ -69,7 +69,7 @@ function App() {
         {images
           .filter(image => image.category === '')
           .map((image, index) => (
-            <TierImage image={image.url} name='test' key={index} />
+            <TierImage image={image} key={index} />
           ))}
       </div>
       <div className='border border-black w-20 text-center cursor-pointer' onClick={clickUpload}>

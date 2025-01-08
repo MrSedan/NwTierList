@@ -1,6 +1,6 @@
 import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface tierImage {
+export interface tierImage {
   name: string;
   url: string;
   category: string;
@@ -16,10 +16,16 @@ const tierImages = createSlice({
     removeTierImage: (state, action: PayloadAction<string>) => {
       return state.filter(image => image.name !== action.payload);
     },
+    changeTierImage: (state, action: PayloadAction<tierImage>) => {
+      return state.map(image => {
+        if (image.name == action.payload.name) return action.payload;
+        return image;
+      });
+    },
   },
 });
 
-export const { addTierImage, removeTierImage } = tierImages.actions;
+export const { addTierImage, removeTierImage, changeTierImage } = tierImages.actions;
 
 const store = configureStore({
   reducer: {

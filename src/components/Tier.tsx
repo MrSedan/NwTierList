@@ -1,4 +1,6 @@
-import { useAppSelector } from '../hooks';
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { changeTierImage, tierImage } from '../store';
 import { TierImage } from './Image';
 
 export interface TierProps {
@@ -10,6 +12,7 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
   let color_code = '';
   let text_color_code = '';
   const tierImages = useAppSelector(state => state.tierImages);
+  const dispatch = useAppDispatch();
   switch (color) {
     case 'green':
       color_code = '#00b894';
@@ -30,9 +33,23 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
     default:
       text_color_code = '#2d3436';
   }
+
+  const [currentDragImage, setCurrentDragImage] = useState<tierImage | null>(null);
+
+  const onDragStart = (image: tierImage) => {
+    setCurrentDragImage(image);
+  };
+
   return (
     <>
-      <div className='w-full min-h-64 bg-[#2d3436] h-auto flex flex-row'>
+      <div
+        className='w-full min-h-64 bg-[#2d3436] h-auto flex flex-row'
+        onDragEnd={() => {
+          // e.preventDefault();
+          if (currentDragImage) dispatch(changeTierImage(currentDragImage));
+          setCurrentDragImage(null);
+        }}
+      >
         <div
           className='w-52 h-80 flex items-center justify-center'
           style={{
@@ -46,7 +63,7 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
           {tierImages
             .filter(image => image.category === name)
             .map((image, index) => (
-              <TierImage image={image.url} name={image.name} key={index} />
+              <TierImage image={image} key={index} onDragStart={() => onDragStart(image)} />
             ))}
         </div>
       </div>
