@@ -35,6 +35,7 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
   }
 
   const [currentDragImage, setCurrentDragImage] = useState<tierImage | null>(null);
+  const [currentDragTier, setCurrentDragTier] = useState<string>('');
 
   const onDragStart = (image: tierImage) => {
     setCurrentDragImage(image);
@@ -43,15 +44,23 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
   return (
     <>
       <div
-        className='w-full min-h-64 bg-[#2d3436] h-auto flex flex-row'
+        className='w-full min-h-40 bg-[#2d3436] h-auto flex flex-row'
         onDragEnd={() => {
           // e.preventDefault();
-          if (currentDragImage) dispatch(changeTierImage(currentDragImage));
+          if (currentDragImage) {
+            if (currentDragImage.category === name) return;
+            console.log(currentDragImage);
+            console.log(name);
+            dispatch(changeTierImage({ ...currentDragImage, category: name }));
+          }
           setCurrentDragImage(null);
+        }}
+        onDragOver={() => {
+          if (currentDragTier !== name) setCurrentDragTier(name);
         }}
       >
         <div
-          className='w-52 h-80 flex items-center justify-center'
+          className='w-24 min-h-40 flex items-center justify-center'
           style={{
             color: text_color_code,
             backgroundColor: color_code,
@@ -59,7 +68,7 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
         >
           <p>{name}</p>
         </div>
-        <div className='image-container flex flex-row gap-1'>
+        <div className='image-container flex flex-row flex-wrap justify-between w-full h-auto'>
           {tierImages
             .filter(image => image.category === name)
             .map((image, index) => (

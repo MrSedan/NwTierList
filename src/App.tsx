@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import './App.css';
+import './App.scss';
 import { TierImage } from './components/Image';
 import { Tier, TierProps } from './components/Tier';
 import { useAppDispatch, useAppSelector } from './hooks';
@@ -79,6 +79,7 @@ function App() {
           name='imageUpload'
           accept='.jpeg'
           ref={uploadBtn}
+          multiple
           style={{ display: 'none' }}
           onChange={event => {
             console.log(event.target.files);
