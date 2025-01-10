@@ -1,5 +1,7 @@
+import EditIcon from '@mui/icons-material/Edit';
 import useStore from '../store';
 import { TierImage } from './Image';
+import './Tier.scss';
 
 export interface TierProps {
   color: string;
@@ -39,12 +41,15 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
     <>
       <div className='w-full min-h-40 bg-[#2d3436] h-auto flex flex-row'>
         <div
-          className='w-24 min-h-40 flex items-center justify-center'
+          className='w-24 min-h-40 flex items-center justify-center relative tier_name'
           style={{
             color: text_color_code,
             backgroundColor: color_code,
           }}
         >
+          <button className='absolute right-[5%] top-[5%] opacity-0 transition duration-250 ease-in-out'>
+            <EditIcon />
+          </button>
           <p>{name}</p>
         </div>
         <div className='image-container flex flex-row flex-wrap justify-between w-full h-auto'>

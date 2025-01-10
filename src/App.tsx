@@ -5,13 +5,8 @@ import './App.scss';
 import { TierImage } from './components/Image';
 import { Tier } from './components/Tier';
 import { TierModal } from './components/TierModal';
+import { tierImage } from './dto/tier';
 import useStore from './store';
-
-interface tierImage {
-  name: string;
-  url: string;
-  category: string;
-}
 
 const App = () => {
   const [images, addTierImage, tierLevels, editTierImage] = useStore(
@@ -22,11 +17,6 @@ const App = () => {
 
   const clickUpload = () => {
     if (uploadBtn.current) uploadBtn.current.click();
-  };
-
-  const getRandomCategoryName = () => {
-    const categoryNames = tierLevels.flatMap(category => category.name);
-    return categoryNames[Math.floor(Math.random() * categoryNames.length)];
   };
 
   const handleAdd = (images: tierImage[]) => {
@@ -55,7 +45,7 @@ const App = () => {
           />
         ))}
       </div>
-      <div className='flex flex-row w-full'>
+      <div className='flex flex-row w-full '>
         {images
           .filter(image => image.category === '')
           .map((image, index) => (
@@ -80,7 +70,7 @@ const App = () => {
                 upload_images.push({
                   url: url,
                   name: event.target.files[i].name.replace('.jpeg', ''),
-                  category: getRandomCategoryName(),
+                  category: '',
                 });
               }
               handleAdd(upload_images);
