@@ -1,27 +1,11 @@
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { useRef } from 'react';
 import { useShallow } from 'zustand/shallow';
 import './App.scss';
 import { TierImage } from './components/Image';
-import { Tier, TierProps } from './components/Tier';
+import { Tier } from './components/Tier';
+import { TierModal } from './components/TierModal';
 import useStore from './store';
-
-const default_tier_levels: TierProps[] = [
-  {
-    name: 'S',
-    color: 'green',
-    textColor: 'black',
-  },
-  {
-    name: 'A',
-    color: 'yellow',
-    textColor: 'black',
-  },
-  {
-    name: 'B',
-    color: 'red',
-    textColor: 'black',
-  },
-];
 
 interface tierImage {
   name: string;
@@ -29,8 +13,10 @@ interface tierImage {
   category: string;
 }
 
-function App() {
-  const [images, addTierImage] = useStore(useShallow(state => [state.images, state.addTierImage]));
+const App = () => {
+  const [images, addTierImage, tierLevels, editTierImage] = useStore(
+    useShallow(state => [state.images, state.addTierImage, state.tierLevels, state.editTierImage]),
+  );
 
   const uploadBtn = useRef<HTMLInputElement>(null);
 
@@ -39,7 +25,7 @@ function App() {
   };
 
   const getRandomCategoryName = () => {
-    const categoryNames = default_tier_levels.flatMap(category => category.name);
+    const categoryNames = tierLevels.flatMap(category => category.name);
     return categoryNames[Math.floor(Math.random() * categoryNames.length)];
   };
 
@@ -49,10 +35,18 @@ function App() {
     });
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.data.current && over && over.data.current) {
+      const image: tierImage = active.data.current.image;
+      editTierImage(image, over.data.current.name);
+    }
+  };
+
   return (
-    <>
+    <DndContext onDragEnd={handleDragEnd}>
       <div className='flex flex-col w-full'>
-        {default_tier_levels.map(tier_level => (
+        {tierLevels.map(tier_level => (
           <Tier
             color={tier_level.color}
             textColor={tier_level.textColor}
@@ -94,8 +88,9 @@ function App() {
           }}
         />
       </div>
-    </>
+      <TierModal />
+    </DndContext>
   );
-}
+};
 
 export default App;

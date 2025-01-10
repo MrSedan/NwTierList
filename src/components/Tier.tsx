@@ -2,9 +2,10 @@ import useStore from '../store';
 import { TierImage } from './Image';
 
 export interface TierProps {
-  color: 'red' | 'yellow' | 'green';
+  color: string;
   name: string;
-  textColor: 'white' | 'black';
+  textColor: string;
+  id?: string;
 }
 export const Tier = ({ color, name, textColor }: TierProps) => {
   let color_code = '';
@@ -21,14 +22,17 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
       color_code = '#ffeaa7';
       break;
     default:
-      color_code = '#6c5ce7';
+      color_code = color;
   }
   switch (textColor) {
     case 'white':
       text_color_code = '#dfe6e9';
       break;
-    default:
+    case 'black':
       text_color_code = '#2d3436';
+      break;
+    default:
+      text_color_code = textColor;
   }
 
   return (

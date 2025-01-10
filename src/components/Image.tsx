@@ -1,20 +1,27 @@
 import { useDraggable } from '@dnd-kit/core';
-import { tierImage } from '../store';
+import { useEffect } from 'react';
+import { tierImage } from '../dto/tier';
+import useStore from '../store';
 import './Image.scss';
 interface ImageProps {
   image: tierImage;
-  onDragStart?: () => void;
 }
 
 export const TierImage = ({ image }: ImageProps) => {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `draggable:${image.name}`,
+    data: { image },
   });
+  const setModalOpen = useStore(state => state.setTierLevelModalOpen);
   const style = transform
     ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: 99999,
       }
     : undefined;
+  useEffect(() => {
+    setModalOpen(isDragging);
+  }, [isDragging, setModalOpen]);
   return (
     <div
       className='flex flex-wrap justify-center gap-4 mr-1 anime-container'
