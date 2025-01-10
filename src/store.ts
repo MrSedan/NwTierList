@@ -1,4 +1,5 @@
-import { configureStore, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 export interface tierImage {
   name: string;
@@ -6,34 +7,27 @@ export interface tierImage {
   category: string;
 }
 
-const tierImages = createSlice({
-  name: 'images',
-  initialState: [] as tierImage[],
-  reducers: {
-    addTierImage: (state, action: PayloadAction<tierImage>) => {
-      state.push(action.payload);
-    },
-    removeTierImage: (state, action: PayloadAction<string>) => {
-      return state.filter(image => image.name !== action.payload);
-    },
-    changeTierImage: (state, action: PayloadAction<tierImage>) => {
-      return state.map(image => {
-        if (image.name == action.payload.name) return action.payload;
-        return image;
-      });
-    },
-  },
-});
+interface tierStore {
+  images: tierImage[];
+  addTierImage: (image: tierImage) => void;
+  editTierImage: (image: tierImage, tier: string) => void;
+  removeTierImage: (image: tierImage) => void;
+}
 
-export const { addTierImage, removeTierImage, changeTierImage } = tierImages.actions;
+const useStore = create(
+  devtools<tierStore>(
+    set => ({
+      images: [] as tierImage[],
+      addTierImage: (image: tierImage) => set(state => ({ images: [...state.images, image] })),
+      editTierImage: (image: tierImage, tier: string) =>
+        set(state => ({ images: state.images.map(i => (i.name === image.name ? { ...i, category: tier } : i)) })),
+      removeTierImage: (image: tierImage) => {
+        URL.revokeObjectURL(image.url);
+        set(state => ({ images: state.images.filter(i => i.name !== image.name) }));
+      },
+    }),
+    { name: 'tierStore' },
+  ),
+);
 
-const store = configureStore({
-  reducer: {
-    tierImages: tierImages.reducer,
-  },
-});
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-
-export default store;
+export default useStore;

@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useShallow } from 'zustand/shallow';
 import './App.scss';
 import { TierImage } from './components/Image';
 import { Tier, TierProps } from './components/Tier';
-import { useAppDispatch, useAppSelector } from './hooks';
-import { addTierImage } from './store';
+import useStore from './store';
 
 const default_tier_levels: TierProps[] = [
   {
@@ -30,11 +30,7 @@ interface tierImage {
 }
 
 function App() {
-  const images = useAppSelector(state => state.tierImages);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
+  const [images, addTierImage] = useStore(useShallow(state => [state.images, state.addTierImage]));
 
   const uploadBtn = useRef<HTMLInputElement>(null);
 
@@ -49,7 +45,7 @@ function App() {
 
   const handleAdd = (images: tierImage[]) => {
     images.forEach(image => {
-      dispatch(addTierImage(image));
+      addTierImage(image);
     });
   };
 

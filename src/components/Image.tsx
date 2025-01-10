@@ -1,3 +1,4 @@
+import { useDraggable } from '@dnd-kit/core';
 import { tierImage } from '../store';
 import './Image.scss';
 interface ImageProps {
@@ -5,14 +6,22 @@ interface ImageProps {
   onDragStart?: () => void;
 }
 
-export const TierImage = ({ image, onDragStart }: ImageProps) => {
+export const TierImage = ({ image }: ImageProps) => {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: `draggable:${image.name}`,
+  });
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
   return (
     <div
       className='flex flex-wrap justify-center gap-4 mr-1 anime-container'
-      onDragStart={() => {
-        // e.preventDefault();
-        if (onDragStart) onDragStart();
-      }}
+      {...listeners}
+      {...attributes}
+      ref={setNodeRef}
+      style={style}
     >
       <div className={`w-[calc(10rem*.5625)] h-40 relative`}>
         <img src={image.url} alt={image.name} className='h-full w-full object-cover' />

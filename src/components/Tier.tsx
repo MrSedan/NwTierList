@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import { changeTierImage, tierImage } from '../store';
+import useStore from '../store';
 import { TierImage } from './Image';
 
 export interface TierProps {
@@ -11,8 +9,7 @@ export interface TierProps {
 export const Tier = ({ color, name, textColor }: TierProps) => {
   let color_code = '';
   let text_color_code = '';
-  const tierImages = useAppSelector(state => state.tierImages);
-  const dispatch = useAppDispatch();
+  const tierImages = useStore(state => state.images);
   switch (color) {
     case 'green':
       color_code = '#00b894';
@@ -34,31 +31,9 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
       text_color_code = '#2d3436';
   }
 
-  const [currentDragImage, setCurrentDragImage] = useState<tierImage | null>(null);
-  const [currentDragTier, setCurrentDragTier] = useState<string>('');
-
-  const onDragStart = (image: tierImage) => {
-    setCurrentDragImage(image);
-  };
-
   return (
     <>
-      <div
-        className='w-full min-h-40 bg-[#2d3436] h-auto flex flex-row'
-        onDragEnd={() => {
-          // e.preventDefault();
-          if (currentDragImage) {
-            if (currentDragImage.category === name) return;
-            console.log(currentDragImage);
-            console.log(name);
-            dispatch(changeTierImage({ ...currentDragImage, category: name }));
-          }
-          setCurrentDragImage(null);
-        }}
-        onDragOver={() => {
-          if (currentDragTier !== name) setCurrentDragTier(name);
-        }}
-      >
+      <div className='w-full min-h-40 bg-[#2d3436] h-auto flex flex-row'>
         <div
           className='w-24 min-h-40 flex items-center justify-center'
           style={{
@@ -72,7 +47,7 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
           {tierImages
             .filter(image => image.category === name)
             .map((image, index) => (
-              <TierImage image={image} key={index} onDragStart={() => onDragStart(image)} />
+              <TierImage image={image} key={index} />
             ))}
         </div>
       </div>
