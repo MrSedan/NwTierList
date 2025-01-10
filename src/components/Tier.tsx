@@ -1,4 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
+import { useShallow } from 'zustand/shallow';
 import useStore from '../store';
 import { TierImage } from './Image';
 import './Tier.scss';
@@ -9,10 +10,10 @@ export interface TierProps {
   textColor: string;
   id?: string;
 }
-export const Tier = ({ color, name, textColor }: TierProps) => {
+export const Tier = ({ color, name, textColor, id }: TierProps) => {
   let color_code = '';
   let text_color_code = '';
-  const tierImages = useStore(state => state.images);
+  const [tierImages, setEditingTierLevel] = useStore(useShallow(state => [state.images, state.setEditingTierLevel]));
   switch (color) {
     case 'green':
       color_code = '#00b894';
@@ -47,7 +48,12 @@ export const Tier = ({ color, name, textColor }: TierProps) => {
             backgroundColor: color_code,
           }}
         >
-          <button className='absolute right-[5%] top-[5%] opacity-0 transition duration-250 ease-in-out'>
+          <button
+            className='absolute right-[5%] top-[5%] opacity-0 transition duration-250 ease-in-out'
+            onClick={() => {
+              setEditingTierLevel({ name, color, textColor, id });
+            }}
+          >
             <EditIcon />
           </button>
           <p>{name}</p>

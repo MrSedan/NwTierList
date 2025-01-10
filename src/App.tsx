@@ -2,6 +2,7 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { useRef } from 'react';
 import { useShallow } from 'zustand/shallow';
 import './App.scss';
+import { EditTierModal } from './components/EditTierModal';
 import { TierImage } from './components/Image';
 import { Tier } from './components/Tier';
 import { TierModal } from './components/TierModal';
@@ -41,11 +42,12 @@ const App = () => {
             color={tier_level.color}
             textColor={tier_level.textColor}
             name={tier_level.name}
-            key={tier_level.name}
+            id={tier_level.id}
+            key={tier_level.id ?? tier_level.name}
           />
         ))}
       </div>
-      <div className='flex flex-row w-full '>
+      <div className='flex flex-row w-full gap-1 p-5'>
         {images
           .filter(image => image.category === '')
           .map((image, index) => (
@@ -79,6 +81,7 @@ const App = () => {
         />
       </div>
       <TierModal />
+      <EditTierModal />
     </DndContext>
   );
 };

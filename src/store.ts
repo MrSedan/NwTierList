@@ -14,6 +14,8 @@ interface tierStore {
   tierLevels: TierProps[];
   addTierLevel: (name: string, color: string, textColor: string) => void;
   editTierLevelName: (id: string, name: string) => void;
+  editingTierLevel: TierProps | null;
+  setEditingTierLevel: (level: TierProps | null) => void;
 }
 
 const useStore = create(
@@ -43,6 +45,8 @@ const useStore = create(
         set(state => ({ tierLevels: [...state.tierLevels, generateTierLevel(name, color, textColor)] })),
       editTierLevelName: (id: string, name: string) =>
         set(state => ({ tierLevels: state.tierLevels.map(t => (t.id === id ? { ...t, name } : t)) })),
+      editingTierLevel: null,
+      setEditingTierLevel: (level: TierProps | null) => set({ editingTierLevel: level }),
     }),
     { name: 'tierStore' },
   ),
