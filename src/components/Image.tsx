@@ -24,7 +24,7 @@ export const TierImage = ({ image }: ImageProps) => {
   }, [isDragging, setModalOpen]);
   return (
     <div
-      className='flex flex-wrap justify-center gap-4 mr-1 anime-container'
+      className='flex flex-wrap justify-center gap-4 mr-1 anime-container touch-manipulation'
       {...listeners}
       {...attributes}
       ref={setNodeRef}

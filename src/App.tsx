@@ -47,7 +47,7 @@ const App = () => {
           />
         ))}
       </div>
-      <div className='flex flex-row w-full gap-1 p-5'>
+      <div className='flex flex-row w-full gap-1 p-5 flex-wrap'>
         {images
           .filter(image => image.category === '')
           .map((image, index) => (

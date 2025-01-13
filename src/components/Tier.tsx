@@ -42,7 +42,7 @@ export const Tier = ({ color, name, textColor, id }: TierProps) => {
     <>
       <div className='w-full min-h-40 bg-[#2d3436] h-auto flex flex-row'>
         <div
-          className='w-24 min-h-40 flex items-center justify-center relative tier_name'
+          className='w-24 min-h-40 flex items-center justify-center relative tier_name text-center text-xs'
           style={{
             color: text_color_code,
             backgroundColor: color_code,
