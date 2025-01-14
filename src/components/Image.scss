@@ -1,5 +1,10 @@
-.anime-container:hover {
+.anime-container:hover, .anime-container:active {
   .anime-name {
-    opacity: 100;
+    opacity: 0;
+  }
+  @media(min-width: 768px) {
+    .anime-name {
+      opacity: 100;
+    }
   }
 }

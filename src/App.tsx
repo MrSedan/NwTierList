@@ -1,4 +1,5 @@
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { GitHub } from '@mui/icons-material';
 import { useRef } from 'react';
 import { useShallow } from 'zustand/shallow';
 import './App.scss';
@@ -35,54 +36,72 @@ const App = () => {
   };
 
   return (
-    <DndContext onDragEnd={handleDragEnd}>
-      <div className='flex flex-col w-full'>
-        {tierLevels.map(tier_level => (
-          <Tier
-            color={tier_level.color}
-            textColor={tier_level.textColor}
-            name={tier_level.name}
-            id={tier_level.id}
-            key={tier_level.id ?? tier_level.name}
-          />
-        ))}
+    <div className='bg-[#2d3436] w-full h-full pb-5'>
+      <div className='bg-[#2d3436] w-full h-12 flex flex-row justify-center items-center text-[#dfe6e9] text-2xl border-b-2'>
+        NwTierList
       </div>
-      <div className='flex flex-row w-full gap-1 p-5 flex-wrap'>
-        {images
-          .filter(image => image.category === '')
-          .map((image, index) => (
-            <TierImage image={image} key={index} />
+      <DndContext onDragEnd={handleDragEnd}>
+        <div className='flex flex-col w-full'>
+          {tierLevels.map(tier_level => (
+            <Tier
+              color={tier_level.color}
+              textColor={tier_level.textColor}
+              name={tier_level.name}
+              id={tier_level.id}
+              key={tier_level.id ?? tier_level.name}
+            />
           ))}
-      </div>
-      <div className='border border-black w-20 text-center cursor-pointer' onClick={clickUpload}>
-        <span>Upload</span>
-        <input
-          type='file'
-          name='imageUpload'
-          accept='.jpeg'
-          ref={uploadBtn}
-          multiple
-          style={{ display: 'none' }}
-          onChange={event => {
-            console.log(event.target.files);
-            if (event.target.files) {
-              const upload_images: tierImage[] = [];
-              for (let i = 0; i < event.target.files.length; i++) {
-                const url = URL.createObjectURL(event.target.files[i]);
-                upload_images.push({
-                  url: url,
-                  name: event.target.files[i].name.replace('.jpeg', ''),
-                  category: '',
-                });
+        </div>
+        {images.some(image => image.category === '') && (
+          <div className='flex flex-row w-full gap-1 p-5 flex-wrap'>
+            {images
+              .filter(image => image.category === '')
+              .map((image, index) => (
+                <TierImage image={image} key={index} />
+              ))}
+          </div>
+        )}
+        <div
+          className='border border-[#dfe6e9] w-32 text-center cursor-pointer  text-[#dfe6e9] hover:text-[#2d3436] hover:bg-[#dfe6e9] 
+          hover:rounded-xl hover:scale-110 active:text-[#2d3436] active:bg-[#dfe6e9] active:rounded-xl active:scale-110 rounded-lg mt-5 ms-auto me-auto 
+          transition-all duration-300 ease-in-out'
+          onClick={clickUpload}
+        >
+          <span>Add photo</span>
+          <input
+            type='file'
+            name='imageUpload'
+            accept='.jpeg'
+            ref={uploadBtn}
+            multiple
+            style={{ display: 'none' }}
+            onChange={event => {
+              console.log(event.target.files);
+              if (event.target.files) {
+                const upload_images: tierImage[] = [];
+                for (let i = 0; i < event.target.files.length; i++) {
+                  const url = URL.createObjectURL(event.target.files[i]);
+                  upload_images.push({
+                    url: url,
+                    name: event.target.files[i].name.replace('.jpeg', ''),
+                    category: '',
+                  });
+                }
+                handleAdd(upload_images);
               }
-              handleAdd(upload_images);
-            }
-          }}
-        />
+            }}
+          />
+        </div>
+        <TierModal />
+        <EditTierModal />
+      </DndContext>
+
+      <div className='w-full text-[#dfe6e9] flex flex-row items-center justify-center md:justify-end mt-5 gap-1 md:pe-5'>
+        <a href='https://git.nwaifu.su/sergey/NwTierList' target='_blank'>
+          Source Code <GitHub />
+        </a>
       </div>
-      <TierModal />
-      <EditTierModal />
-    </DndContext>
+    </div>
   );
 };
 
