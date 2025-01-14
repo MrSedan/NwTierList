@@ -58,7 +58,7 @@ export const Tier = ({ color, name, textColor, id }: TierProps) => {
           </button>
           <p>{name}</p>
         </div>
-        <div className='image-container flex flex-row flex-wrap justify-between w-full h-auto'>
+        <div className='image-container flex flex-row flex-wrap justify-start w-full h-auto gap-1'>
           {tierImages
             .filter(image => image.category === name)
             .map((image, index) => (
