@@ -126,7 +126,8 @@ const App = () => {
         <span>Export as PNG</span>
       </div>
 
-      <div className='w-full text-[#dfe6e9] flex flex-row items-center justify-center md:justify-end mt-5 gap-1 md:pe-5'>
+      <div className='w-full text-[#dfe6e9] flex flex-row items-center justify-center md:justify-between mt-5 gap-1 md:pe-5 md:ps-5'>
+        <span className='text-[#dfe6e9]'>Version 0.0.2</span>
         <a href='https://git.nwaifu.su/sergey/NwTierList' target='_blank'>
           Source Code <GitHub />
         </a>
